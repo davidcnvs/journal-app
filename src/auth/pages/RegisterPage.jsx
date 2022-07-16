@@ -3,20 +3,27 @@ import { Link as RouterLink } from "react-router-dom"
 import { useForm } from "../../hooks"
 import { AuthLayout } from "../layout/AuthLayout"
 
+const formData = {
+  email: 'david.cnvs@gmail.com',
+  password: '123456',
+  displayName: 'David Canovas'
+}
+
+const formValidations = {
+  email: [ (value) => value.includes('@'), 'El email debe ser valido'],
+  password: [ (value) => value.length >= 6, 'La contraseña debe tener mas de 6 caracteres'],
+  displayName: [ (value) => value.length >= 1, 'El nombre es obligatorio'],
+}
+
+
 export const RegisterPage = () => {
 
-  const {formState, displayName, email, password, onInputChange, 
-    isFormValid, displayNameValid, emailValid, passwordValid} = useForm({
-    email: 'david.cnvs@gmail.com',
-    password: '123456',
-    displayName: 'David Canovas'
-  });
+  const {
+    formState, displayName, email, password, onInputChange, 
+    isFormValid, displayNameValid, emailValid, passwordValid
+  } = useForm(formData, formValidations);
 
-  const formValidations = {
-    email: [ (value) => value.includes('@'), 'El email debe ser valido'],
-    password: [ (value) => value.length >= 6, 'La contraseña debe tener mas de 6 caracteres'],
-    displayName: [ (value) => value.length >= 1, 'El nombre es obligatorio'],
-  }
+  console.log(displayNameValid)
 
   const onSubmit = (event) => {
     event.preventDefault();
