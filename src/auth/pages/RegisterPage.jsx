@@ -1,12 +1,13 @@
+import { useState } from "react";
 import { Button, Grid, Link, TextField, Typography } from "@mui/material"
 import { Link as RouterLink } from "react-router-dom"
 import { useForm } from "../../hooks"
 import { AuthLayout } from "../layout/AuthLayout"
 
 const formData = {
-  email: 'david.cnvs@gmail.com',
-  password: '123456',
-  displayName: 'David Canovas'
+  email: '',
+  password: '',
+  displayName: ''
 }
 
 const formValidations = {
@@ -18,6 +19,8 @@ const formValidations = {
 
 export const RegisterPage = () => {
 
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
   const {
     formState, displayName, email, password, onInputChange, 
     isFormValid, displayNameValid, emailValid, passwordValid
@@ -27,7 +30,7 @@ export const RegisterPage = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    console.log(formState);
+    setFormSubmitted(true);
   }
 
 
@@ -43,7 +46,7 @@ export const RegisterPage = () => {
               name="displayName"
               value={displayName}
               onChange={onInputChange} 
-              error={!displayNameValid}
+              error={!!displayNameValid && formSubmitted}
               helperText={displayNameValid}
               fullWidth />
             </Grid>
@@ -54,7 +57,9 @@ export const RegisterPage = () => {
               placeholder='mrdoe@mail.com'
               name="email"
               value={email}
-              onChange={onInputChange} 
+              onChange={onInputChange}
+              error={!!emailValid && formSubmitted}
+              helperText={emailValid} 
               fullWidth />
             </Grid>
             <Grid item xs={12} sx={{mt:2}}>
@@ -64,7 +69,9 @@ export const RegisterPage = () => {
               placeholder='*******' 
               name="password"
               value={password}
-              onChange={onInputChange} 
+              onChange={onInputChange}
+              error={!!passwordValid && formSubmitted}
+              helperText={passwordValid} 
               fullWidth />
             </Grid>
 
