@@ -3,12 +3,15 @@ import { Button, Grid, Link, TextField, Typography } from "@mui/material"
 import { Link as RouterLink } from "react-router-dom"
 import { useForm } from "../../hooks"
 import { AuthLayout } from "../layout/AuthLayout"
+import { useDispatch } from "react-redux";
 
 const formData = {
   email: '',
   password: '',
   displayName: ''
 }
+
+const dispatch = useDispatch();
 
 const formValidations = {
   email: [ (value) => value.includes('@'), 'El email debe ser valido'],
@@ -31,6 +34,7 @@ export const RegisterPage = () => {
   const onSubmit = (event) => {
     event.preventDefault();
     setFormSubmitted(true);
+    if(!isFormValid) return;
   }
 
 
