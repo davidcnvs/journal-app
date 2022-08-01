@@ -1,17 +1,16 @@
-import { useState } from "react";
-import { Button, Grid, Link, TextField, Typography } from "@mui/material"
+import { useMemo, useState } from "react";
+import { Alert, Button, Grid, Link, TextField, Typography } from "@mui/material"
 import { Link as RouterLink } from "react-router-dom"
 import { useForm } from "../../hooks"
 import { AuthLayout } from "../layout/AuthLayout"
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { startCreatingUserWithEmailPassword } from "../../store/auth";
 
 const formData = {
   email: '',
   password: '',
   displayName: ''
 }
-
-const dispatch = useDispatch();
 
 const formValidations = {
   email: [ (value) => value.includes('@'), 'El email debe ser valido'],
@@ -22,19 +21,23 @@ const formValidations = {
 
 export const RegisterPage = () => {
 
+  const dispatch = useDispatch();
   const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const {status, errorMessage} = useSelector(state => state.auth);
+  const isCheckingAuthentication = useMemo( () => status === 'checking', [status]);
 
   const {
     formState, displayName, email, password, onInputChange, 
     isFormValid, displayNameValid, emailValid, passwordValid
   } = useForm(formData, formValidations);
 
-  console.log(displayNameValid)
-
   const onSubmit = (event) => {
     event.preventDefault();
     setFormSubmitted(true);
     if(!isFormValid) return;
+
+    dispatch(startCreatingUserWithEmailPassword(formState));
   }
 
 
@@ -80,8 +83,12 @@ export const RegisterPage = () => {
             </Grid>
 
             <Grid container spacing={2} sx={{mb:2, mt:1}}>
+            <Grid item xs={12} sm={12} display={!!errorMessage ? '' : 'none'}>
+                <Alert severity="error">{errorMessage}</Alert>
+              </Grid>
               <Grid item xs={12} sm={12}>
                 <Button 
+                disabled={isCheckingAuthentication}
                 variant="contained" 
                 type="submit"
                 fullWidth>
