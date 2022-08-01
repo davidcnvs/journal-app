@@ -4,7 +4,7 @@ import { Button, Grid, Link, TextField, Typography } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
 import { Link as RouterLink } from "react-router-dom"
 import { useForm } from "../../hooks"
-import { checkingAuthentication, startGoogleSignIn } from "../../store/auth/thunks"
+import { startGoogleSignIn, startLoginWithEmailPassword } from "../../store/auth/thunks"
 import { AuthLayout } from "../layout/AuthLayout"
 
 export const LoginPage = () => {
@@ -23,7 +23,8 @@ export const LoginPage = () => {
   const onSubmit = (event) => {
     event.preventDefault();
     console.log({email, password});
-    dispatch(checkingAuthentication());
+    //no es la accion a despachar   
+    dispatch(startLoginWithEmailPassword({email, password}));
   }
 
   const onGoogleSignIn = () => {
